@@ -1,6 +1,6 @@
 // https://www.reddit.com/r/dailyprogrammer/comments/aphavc/20190211_challenge_375_easy_print_a_new_number_by/
 
-object Challenge375easy extends App {
+object Challenge375Easy extends App {
 
   def transform1(s: String): String = s.split("").toList.map(x ⇒ (x.toInt + 1).toString).mkString("")
 
