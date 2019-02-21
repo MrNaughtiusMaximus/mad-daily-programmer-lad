@@ -1,6 +1,6 @@
 import org.scalatest.FlatSpec
 
-class Challenge375 extends FlatSpec {
+class Challenge374 extends FlatSpec {
 
   "Challenge 374" should "return 2 when supplying 1234" in {
     assert(Challenge374Easy.recurse(1234) === 2)
