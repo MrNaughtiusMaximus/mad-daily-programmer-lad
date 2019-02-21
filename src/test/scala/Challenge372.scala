@@ -30,4 +30,40 @@ class Challenge372 extends FlatSpec {
     assert(Challenge372Easy.recurse("x") === false)
   }
 
+  "Challenge 372 Bonus" should "return TRUE when supplying 'xxxyyyzzz'" in {
+    assert(Challenge372Easy.check("xxxyyyzzz") === true)
+  }
+
+  it should "return TRUE when supplying 'abccbaabccba'" in {
+    assert(Challenge372Easy.check("abccbaabccba") === true)
+  }
+
+  it should "return TRUE when supplying 'abcdefghijklmnopqrstuvwxyz'" in {
+    assert(Challenge372Easy.check("abcdefghijklmnopqrstuvwxyz") === true)
+  }
+
+  it should "return TRUE when supplying 'www'" in {
+    assert(Challenge372Easy.check("www") === true)
+  }
+
+  it should "return TRUE when supplying 'x'" in {
+    assert(Challenge372Easy.check("x") === true)
+  }
+
+  it should "return TRUE when supplying ''" in {
+    assert(Challenge372Easy.check("") === true)
+  }
+
+  it should "return FALSE when supplying 'xxxyyyzzzz'" in {
+    assert(Challenge372Easy.check("xxxyyyzzzz") === false)
+  }
+
+  it should "return FALSE when supplying 'pqq'" in {
+    assert(Challenge372Easy.check("pqq") === false)
+  }
+
+  it should "return FALSE when supplying 'fdedfdeffeddefeeeefddf'" in {
+    assert(Challenge372Easy.check("fdedfdeffeddefeeeefddf") === false)
+  }
+
 }
