@@ -16,6 +16,8 @@ object Challenge368Intermediate {
 
   def generateMatrices(n: Int): List[List[Boolean]] = List.fill(n*n)(Random.nextBoolean()).combinations(n).flatMap(_.permutations.toList).toList
 
+  def generateAllPossibleGrids(n: Int): List[List[List[Boolean]]] = generateMatrices(n).combinations(n).toList
+
   // Need to create a function to check whether there is such an axis-aligned square in the matrix
 //  def checkSquare(list: List[List[Boolean]]): Boolean = {
 //    // Here, we can use n from createMatrix, but take away 1
