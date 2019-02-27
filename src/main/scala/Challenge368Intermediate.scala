@@ -11,11 +11,10 @@ object Challenge368Intermediate {
   def createMatrix(n: Int): List[List[Boolean]] = List.fill(n)(List.fill(n)(Random.nextBoolean()))
 
   // Need to create a sequence of all createMatrix
-  def createSeqOfMatrices(n: Int): Seq[List[List[Boolean]]] = Seq.fill(math.pow(2,n*n).toInt)(List.fill(n)(List.fill(n)(Random.nextBoolean())))
 
-  def checkMatrices(seq: Seq[List[List[Boolean]]]): Seq[List[List[Boolean]]] = {
-    seq.filter(func(_))
-  }
+  def checkMatrices(seq: Seq[List[List[Boolean]]]): Seq[List[List[Boolean]]] = seq.filter(func(_))
+
+  def generateMatrices(n: Int): List[List[Boolean]] = List.fill(n*n)(Random.nextBoolean()).combinations(n).flatMap(_.permutations.toList).toList
 
   // Need to create a function to check whether there is such an axis-aligned square in the matrix
 //  def checkSquare(list: List[List[Boolean]]): Boolean = {
