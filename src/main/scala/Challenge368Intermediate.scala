@@ -1,77 +1,115 @@
+
+import scala.annotation.tailrec
 import scala.util.Random
 // https://www.reddit.com/r/dailyprogrammer/comments/9z3mjk/20181121_challenge_368_intermediate_singlesymbol/
 
-object Challenge368Intermediate extends C368A1 with C368A2
+object Challenge368Intermediate {
 
-sealed trait C368A1 {
+  def allEqual[T](t: T*): Boolean = if(t.nonEmpty) t.forall(_ == t.head) else false
 
-  def createMatrix(n: Int): Vector[Vector[Boolean]] = Vector.fill(n)(Vector.fill(n)(Random.nextBoolean()))
+  def createMatrix(n: Int): Vector[Vector[Int]] = Vector.fill(n)(Vector.fill(n)(Random.nextInt(2)))
 
   // Used for displaying the result a bit neater
-  def render(v: Vector[Vector[Boolean]]): Unit = v.foreach(println(_))
+  def render[T](v: Vector[Vector[T]]): Unit = v.foreach(println(_))
 
-  def getValidMatrix(n: Int): Vector[Vector[Boolean]] = {
+  @tailrec
+  def getValidMatrix(n: Int, i: Int = 0): Vector[Vector[Int]] = {
+    println(s"\n***\nIteration $i")
     val x = createMatrix(n)
-    if(check(x)) x else getValidMatrix(n)
+    if(recurseDiagonal(l = x)) x else getValidMatrix(n, i+1)
   }
 
-  def check(l: Vector[Vector[Boolean]]): Boolean = {
+  // NEW ATTEMPT
+  @tailrec
+  def recurseDiagonal(i: Int = 0, l: Vector[Vector[Int]]): Boolean = if(i < l.length - 1) {
+    if(recurse(i, i, i + 1, i + 1, l)) {
+      if(recurseHorizontal(i, i, l)) {
+        if(recurseVertical(i, i, l)) {
+          recurseDiagonal(i + 1, l)
+        } else false
+      } else false
+    } else false
+  } else true
 
-    // Checking whether there are any squares starting from position (x,y), e.g.
+  @tailrec
+  def recurseVertical(i: Int = 0, xpos: Int = 0, l: Vector[Vector[Int]]): Boolean = if(i < l.length - 1) {
+    if (recurse(xpos, i, xpos + 1, i + 1, l)) recurseVertical(i + 1,xpos,l) else false
+  } else true
+
+  // Moving the starting position horizontally, e.g. (x,y) => (0,0) => (1,0)
+  @tailrec
+  def recurseHorizontal(i: Int = 0, ypos: Int = 0, l: Vector[Vector[Int]]): Boolean = if(i < l.length - 1) {
+    if (recurse(i, ypos, i + 1, ypos + 1, l)) recurseHorizontal(i + 1,ypos,l) else false
+  } else true
+
+  @tailrec
+  def recurse(x: Int = 0, y: Int = 0, a: Int = 1, b: Int = 1, l: Vector[Vector[Int]]): Boolean = {
+    if (a == l.length || b == l.length) true
+    else if (allEqual(x,y,a,b)) true
+    else if (allEqual(l(x)(y), l(x)(b), l(a)(y), l(a)(b))) {
+      println(s"x=$x   y=$y    a=$a   b=$b")
+      println(s"${l(x)(y)}, ${l(x)(b)}, ${l(a)(y)}, ${l(a)(b)}")
+      render(l)
+      println(s"\n***")
+      false
+    }
+    else if (a < l.length && b < l.length) recurse(x, y, a + 1, b + 1, l)
+    else true
+  }
+
+
+  // OLD ATTEMPT
+  def check(vector: Vector[Vector[Int]]): Boolean = {
+
+    // Checking whether there are any squares starting from position (x,y) and expanding, e.g.
     // checking if (x,y) == (x,1) == (1,1) == (1, y), then
     // checking if (x,y) == (x,2) == (2,2) == (2, y), etc.
-    def recurse(x: Int = 0, y: Int = 0, e: Int = 1): Boolean = {
-      if (e == l.length) true
-      else if (l(x)(y) && l(x)(e) && l(e)(y) && l(e)(e)) false
-      else if (e < l.length) recurse(x=x, y=y, e + 1)
+    @tailrec
+    def recurse(x: Int = 0, y: Int = 0, a: Int = 1, b: Int = 1): Boolean = {
+      if (a == vector.length || b == vector.length) true
+      else if (allEqual(x,y,a,b)) true
+      else if (allEqual(vector(x)(y), vector(x)(b), vector(a)(y), vector(a)(b))) {
+        println(s"x=$x   y=$y    a=$a   b=$b")
+        println(s"${vector(x)(y)}, ${vector(x)(b)}, ${vector(a)(y)}, ${vector(a)(b)}")
+        render(vector)
+        println(s"\n***")
+        false
+      }
+      else if (a < vector.length && b < vector.length) recurse(x, y, a + 1, b + 1)
       else true
     }
 
+    //TODO Incorporate Horizontal + Vertical into Diagonal
     // Moving the starting position diagonally, e.g. (x,y) => (0,0) => (1,1)
-    def recurseDiagonal(i: Int = 0): Boolean = if(i < l.length - 1) {
-      if(recurse(x = i, y = i)) recurseDiagonal(i + 1) else false
+    @tailrec
+    def recurseDiagonal(i: Int = 0): Boolean = if(i < vector.length - 1) {
+      if(recurse(i, i, i + 1, i + 1)) {
+        if(recurseHorizontal(i, i)) {
+          if(recurseVertical(i, i)) {
+            recurseDiagonal(i + 1)
+          } else false
+        } else false
+      } else false
     } else true
 
-    // Moving the starting position diagonally, e.g. (x,y) => (0,0) => (1,1)
-    def recurseReverseDiagonal(i: Int = l.length - 1): Boolean = if (i > 1) {
-      if (recurse(x = i, y = i)) recurseReverseDiagonal(i - 1) else false
-    } else true
+    // Moving the starting position diagonally, e.g. if l.length == 4 => (x,y) => (3,3) => (2,2)
+//    @tailrec
+//    def recurseReverseDiagonal(i: Int = l.length - 1): Boolean = if (i > 1) {
+//      if (recurse(x = i, y = i)) recurseReverseDiagonal(i - 1) else false
+//    } else true
 
     // Moving the starting position vertically, e.g. (x,y) => (0,0) => (0,1)
-    def recurseVertical(i: Int = 0): Boolean = if(i < l.length - 1) {
-      if (recurse(y = i)) recurseVertical(i + 1) else false
+    @tailrec
+    def recurseVertical(i: Int = 0, xpos: Int = 0): Boolean = if(i < vector.length - 1) {
+      if (recurse(xpos, i, xpos + 1, i + 1)) recurseVertical(i + 1) else false
     } else true
 
     // Moving the starting position horizontally, e.g. (x,y) => (0,0) => (1,0)
-    def recurseHorizontal(i: Int = 0): Boolean = if(i < l.length - 1) {
-      if (recurse(x = i)) recurseHorizontal(i + 1) else false
+    @tailrec
+    def recurseHorizontal(i: Int = 0, ypos: Int = 0): Boolean = if(i < vector.length - 1) {
+      if (recurse(i, ypos, i + 1, ypos + 1)) recurseHorizontal(i + 1) else false
     } else true
 
-    recurseDiagonal() && recurseReverseDiagonal() && recurseVertical() && recurseHorizontal()
+    recurseDiagonal()
   }
-}
-
-sealed trait C368A2 extends C368A1 {
-
-
-  //  def checkMatrices(seq: Seq[Vector[Vector[Boolean]]]): Seq[Vector[Vector[Boolean]]] = seq.filter(func(_))
-
-  //  def generateMatrices(n: Int): Vector[Vector[Boolean]] = Vector.fill(n*n)(Random.nextBoolean()).combinations(n).flatMap(_.permutations.toVector).toVector
-
-  //  def generateAllPossibleGrids(n: Int): Vector[Vector[Vector[Boolean]]] = generateMatrices(n).combinations(n).toVector
-
-  //  def recurse(l: Vector[Vector[Boolean]], x: Int = 0, y: Int = 0, e: Int = 1): Boolean = {
-  //    if (e == l.length) true
-  //    else if (l(x)(y) && l(x)(e) && l(e)(y) && l(e)(e)) {
-  //      println(s"x = $x")
-  //      println(s"y = $y")
-  //      println(s"Index = $e")
-  //      l.foreach(println(_))
-  //      println(s"\n ${l(x)(y)} && ${l(x)(e)} && ${l(e)(y)} && ${l(e)(e)}")
-  //      false
-  //    }
-  //    else if (e < l.length) recurse(l, x = x, y = y, e = e + 1)
-  //    else true
-  //  }
-
 }
