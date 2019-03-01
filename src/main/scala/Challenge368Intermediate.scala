@@ -102,7 +102,7 @@ object Challenge368Intermediate extends NewAttempt {
 }
 
 trait NewAttempt {
-  
+
   def generateNumber(n: Int): List[Int] = List.tabulate(n){
       case a if a <= n+1 ⇒ Random.nextInt(2)
       case _             ⇒ Random.nextInt(2)
