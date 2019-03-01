@@ -27,10 +27,29 @@ object Challenge369Easy {
   // The most efficient way of converting
   val hexIndex: List[String] = List("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F")
 
+// Examples
+//  hexcolor(255, 99, 71)   ⇒ "#FF6347"
+//  hexcolor(184, 134, 11)  ⇒ "#B8860B"
+//  hexcolor(189, 183, 107) ⇒ "#BDB76B"
+//  hexcolor(0, 0, 205)     ⇒ "#0000CD"
   def convertToHex(i1: Int, i2: Int, i3: Int): String =
     "#" + intToHex(i1/16) + intToHex(i1%16) + intToHex(i2/16) + intToHex(i2%16) + intToHex(i3/16) + intToHex(i3%16)
 
   def convertToHex2(i1: Int, i2: Int, i3: Int): String =
     "#" + hexIndex(i1/16) + hexIndex(i1%16) + hexIndex(i2/16) + hexIndex(i2%16) + hexIndex(i3/16) + hexIndex(i3%16)
+
+//  blend({"#000000", "#778899"})            ⇒ "#3C444C" - actually getting "#3B444C" due to rounding issues
+//  blend({"#E6E6FA", "#FF69B4", "#B0C4DE"}) ⇒ "#DCB1D9"
+  def blend(s: String*): String = {
+
+    def convert(c: Char): Int = hexIndex.indexOf(c.toString)
+
+    val l: Seq[(Int, Int, Int)] = for (i ← s) yield (
+      convert(i(1))*16+convert(i(2)),
+      convert(i(3))*16+convert(i(4)),
+      convert(i(5))*16+convert(i(6)))
+
+    convertToHex2(l.map(_._1).sum/l.length,l.map(_._2).sum/l.length, l.map(_._3).sum/l.length)
+  }
 
 }
