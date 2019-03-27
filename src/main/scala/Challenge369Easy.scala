@@ -3,16 +3,16 @@
 object Challenge369Easy {
 
   def intToHex(int: Int): String = int match {
+    case 10  ⇒ "A"
+    case 11  ⇒ "B"
+    case 12  ⇒ "C"
+    case 13  ⇒ "D"
+    case 14  ⇒ "E"
+    case 15  ⇒ "F"
     case a if int < 10 ⇒ a.toString
-    case a if a == 10  ⇒ "A"
-    case a if a == 11  ⇒ "B"
-    case a if a == 12  ⇒ "C"
-    case a if a == 13  ⇒ "D"
-    case a if a == 14  ⇒ "E"
-    case a if a == 15  ⇒ "F"
   }
 
-  // More efficient than intToHex
+  // More efficient than intToHex in terms of java processes
   def intToHex2(int: Int): String = {
     if (int < 10) int.toString
     else if (int == 10) "A"

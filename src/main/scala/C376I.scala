@@ -1,16 +1,9 @@
-import java.time.{Duration, Instant}
+import ya.pkg.Utils
 
 import scala.annotation.tailrec
 // https://www.reddit.com/r/dailyprogrammer/comments/b0nuoh/20190313_challenge_376_intermediate_the_revised/
 
-object C376I extends App {
-
-  def checkTime(f: ⇒ Unit): Unit = {
-    val start = Instant.now()
-    f
-    val end = Instant.now()
-    println("The function runs for " + Duration.between(start,end).toMillis.toString)
-  }
+object C376I extends Utils {
 
   /** Condition for a leap year:
     * - evenly divisible by 4 == leap

@@ -8,8 +8,6 @@ object Challenge375Easy extends App {
 
   def transform3(s: String): String = (for( char ← s) yield (char.toString.toInt + 1).toString).mkString("")
 
-  // TODO Ask Luke why fold returns Any in this case
-//  def transform4(s: String): String = s.fold("")((acc, s) ⇒ acc + (s.toString.toInt + 1).toString)
-//    .mkString("")
+  def transform4(s: String): String = s.toList.map(_.toString).fold("")((acc, s) ⇒ acc ++ (s.toInt + 1).toString).mkString("")
 
 }
