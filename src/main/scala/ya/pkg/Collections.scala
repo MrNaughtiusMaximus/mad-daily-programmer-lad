@@ -29,4 +29,12 @@ class Collections {
     case List(a)    ⇒ (Option(a), None)
   }.toList
 
+  abstract class Animal
+  class Dog extends Animal
+  class Cat extends Animal
+
+  case class Barn[A <: Animal](animals: A*)
+
+  val animalBarn: Barn[Animal] = Barn(new Dog(), new Cat())
+
 }
