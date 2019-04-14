@@ -37,4 +37,49 @@ class Collections {
 
   val animalBarn: Barn[Animal] = Barn(new Dog(), new Cat())
 
+  /** Reduce (from native Scala collections)*/
+  val l = List(1,1,2,3,5,8)
+  l.reduce { (x, y) =>
+    println(s"x is $x and y is $y")
+    y
+  }
+//  x is 1 and y is 1
+//  x is 1 and y is 2
+//  x is 2 and y is 3
+//  x is 3 and y is 5
+//  x is 5 and y is 8
+//  res18: Int = 8
+
+  l.reduce { (x, y) =>
+    println(s"x is $x and y is $y")
+    x
+  }
+//  x is 1 and y is 1
+//  x is 1 and y is 2
+//  x is 1 and y is 3
+//  x is 1 and y is 5
+//  x is 1 and y is 8
+//  res19: Int = 1
+
+  l.reduceRight { (x, y) =>
+    println(s"x is $x and y is $y")
+    y
+  }
+//  x is 5 and y is 8
+//  x is 3 and y is 8
+//  x is 2 and y is 8
+//  x is 1 and y is 8
+//  x is 1 and y is 8
+//  res20: Int = 8
+
+  l.reduceRight { (x, y) =>
+    println(s"x is $x and y is $y")
+    x
+  }
+//  x is 5 and y is 8
+//  x is 3 and y is 5
+//  x is 2 and y is 3
+//  x is 1 and y is 2
+//  x is 1 and y is
+
 }

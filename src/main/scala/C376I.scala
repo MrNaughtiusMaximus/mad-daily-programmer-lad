@@ -1,3 +1,5 @@
+import java.time.{Duration, Instant}
+
 import ya.pkg.Utils
 
 import scala.annotation.tailrec
@@ -5,38 +7,38 @@ import scala.annotation.tailrec
 
 object C376I extends Utils {
 
+  def checkTime(f: ⇒ Unit): Unit = {
+    val start = Instant.now()
+    print(s"Starting time is ${start.toString}")
+    f
+    val end = Instant.now()
+    print(s"Ending time is ${end.toString}")
+    println("The function runs for " + Duration.between(start, end).toMillis.toString)
+  }
+
+  def test(): Boolean = {
+    val res = leap(123456789101112L, 1314151617181920L)
+    println(s"Result is $res")
+    res == 288412747246240L
+  }
+
   /** Condition for a leap year:
     * - evenly divisible by 4 == leap
     * - evenly by 100 != leap
     * - year % 900 == 200 or 600 is leap
     */
   @tailrec
-  def leap(start: Int, end: Int, acc: Int = 0): Int = {
-    if (start >= end) acc
-    else if (start % 900 == 600 | start % 900 == 200) leap(start + 1, end, acc + 1)
-    else if (start % 100 == 0) leap(start + 1, end, acc)
-    else if (start % 4 == 0) leap(start + 1, end, acc + 1)
-    else leap(start + 1, end, acc)
+  def leap(st: Long, end: Long, acc: Long = 0): Long = {
+    if (st >= end) acc
+    else if (st % 4 != 0) leap(st + 1, end, acc)
+    else if (st > 1500 && end - st > 4500 && st % 1500 == 0 && ((st / 1500) - 1) % 3 == 0) {
+      val x = (end-st)/4500
+      if (st + x*4500 < end) leap(st + x*4500, end, acc + 1090*x)
+      else leap(st + (x-1)*4500, end, acc + 1090*(x-1))
+    }
+    else if (st % 900 == 600 | st % 900 == 200) leap(st + 1, end, acc + 1)
+    else if (st % 100 == 0) leap(st + 1, end, acc)
+    else leap(st + 1, end, acc + 1)
   }
-
-  /** 2000 to 2097...2100 are 25 leap years
-    * 2000 to 2093...2096 are 24 leap years
-    * x = (x2 - x1)/4
-    * When does the exception start repeating itself? What is the largest common denominator?
-    * 3000 == 727
-    *
-    * 1100 = 1*900 + 200
-    * 1500 = 1*900 + 600
-    * ... starts repeating
-    * 2000 = 2*900 + 200
-    * 2400 = 2*900 + 600
-    * 2900 = 3*900 + 200
-    * 3300 = 3*900 + 600
-    * 3800 = 4*900 + 200
-    * 4200 = 4*900 + 600
-    * 4700 = 5*900 + 200
-    * 5100 = 5*900 + 600
-    */
-
 
 }

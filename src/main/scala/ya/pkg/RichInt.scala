@@ -27,4 +27,8 @@ class RichInt {
   val num: Long = 123456789012L
   val numList: List[Int] = numberToList(num)
 
+  val anInt = 1
+  val anotherInt = 1
+  anInt.max(anotherInt) // returns the bigger out of the pair - part of native scala.math package
+
 }
